@@ -1,0 +1,105 @@
+
+<p-panel header="Simulation d'un emprunt" [toggleable]="true">
+  <div class="ui-g-12">
+    <hr/>
+    <p>
+      <span class="ui-float-label">
+          <input id="montant" type="text" size="30" pInputText [(ngModel)]="montant">
+          <label for="montant">Montant emprunté</label>
+        </span>
+    </p>
+    <p>
+      <span class="ui-float-label">
+          <input id="taux" type="text" size="30" pInputText [(ngModel)]="taux">
+          <label for="taux">Taux annuel en %</label>
+        </span>
+    </p>
+    <p>
+      <span class="ui-float-label">
+          <input id="duree" type="text" size="30" pInputText [(ngModel)]="duree">
+          <label for="duree">Nombre de mensualités</label>
+        </span>
+    </p>
+
+	<button type="button" pButton icon="fa-external-link-square" (click)="calculer()" label="calculer"></button>
+
+    <p-tabView>
+        <p-tabPanel header="Synthèse">
+           Montant : {{montant | number:'.2'}}<br/>
+           Taux : {{taux}} % <br/>
+           Duree : {{duree}} mois<br/>
+           Mensualité : {{mensualite | number:'.2'}}<br/>
+           Intérêts totaux : {{interetsTot | number:'.2'}}<br/>
+        </p-tabPanel>
+
+        <p-tabPanel header="Tableau d'amortissement">
+        
+				<table>
+			        <tr>
+			            <th>N°</th>
+			            <th>Amortissement</th>
+			            <th>Intérêts</th>
+			            <th>Mensualité</th>
+			            <th>Capital restant du</th>
+			        </tr>
+				    <tr *ngFor="let uneLigne of ta.getLignesAmortissement()">
+				            <td>{{uneLigne.num}}</td>
+				            <td>{{ uneLigne.amort.toFixed(2) }}</td>
+            				<td>{{ uneLigne.interets.toFixed(2) }}</td>
+            				<td>{{ (uneLigne.interets+uneLigne.amort).toFixed(2) }}</td>
+            				<td>{{ uneLigne.crd.toFixed(2) }}</td>
+				    </tr>
+				</table>        
+
+        </p-tabPanel>
+
+        <p-tabPanel header="Graphique">
+			<div class="ui-g">
+			    <div class="ui-g-12 ui-md-6">
+			    	<p-chart type="pie" [data]="data1"></p-chart>
+			    </div>
+			    <div class="ui-g-12 ui-md-6">
+			    	<p-chart type="line" [data]="data2"></p-chart>
+			    </div>        
+			</div>        
+        </p-tabPanel>
+
+    </p-tabView>
+
+    <button type="button" pButton icon="fa-external-link-square" (click)="showDialog()" label="à propos de cette application..."></button>
+
+    </div>
+</p-panel>
+
+
+<!-- Boite de dialogue A PROPOS DE -->
+<p-dialog header="A propos..." [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true">
+
+    <p style="text-align:center">
+      Application réalisée avec ANGULAR et PRIME-NG
+      <br/>
+      (c) Régis JAMBOIS - NOV 2017
+    </p>
+
+  <p style="text-align:center">
+    <img width="250" src="assets/images/angular.png">
+  </p>
+
+  <p style="text-align:center">
+    <img width="100" src="assets/images/prime.png">
+  </p>
+
+  <p style="text-align:center">
+    <img width="100" src="assets/images/ts.png">
+  </p>
+
+  <p style="text-align:center">
+    <img width="250" src="assets/images/nodejs.png">
+  </p>
+
+    <p-footer>
+        <div class="ui-dialog-buttonpane ui-helper-clearfix">
+            <button type="button" pButton icon="fa-check" (click)="closeDialog()" label="OK"></button>
+        </div>
+    </p-footer>
+</p-dialog>
